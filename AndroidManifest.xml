@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:targetSandboxVersion="1">
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" /> <!-- < Only if you're using GCM or localNotificationSchedule() > -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <permission
+        android:name="${applicationId}.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" /> <!-- < Only if you're using GCM or localNotificationSchedule() > -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- For Cameraroll -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <application
+        android:name=".MainApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/logo_1"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:allowBackup">
+
+        <!-- 위젯 Service -->
+        <service
+            android:name=".widgets.RoubitRemoteViewsService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_REMOTEVIEWS"></service>
+
+        <receiver
+            android:label="@string/widget_name3b"
+            android:name=".widgets.Widget3bProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget3b_info" />
+        </receiver>
+
+        <receiver android:name=".utils.AlarmReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="roubit.widget.roubisyroom.ALARM_ACTION" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:label="@string/widget_name1"
+            android:name=".widgets.Widget1Provider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.ACTION_SHOW_MESSAGE" />
+                <action android:name="android.appwidget.action.ACTION_NEXT_CHAT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget1_info" />
+        </receiver>
+        <receiver
+            android:label="@string/widget_name3a"
+            android:name=".widgets.Widget3aProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget3a_info" />
+        </receiver>
+        <receiver
+            android:label="@string/widget_name2"
+            android:name=".widgets.Widget2Provider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="roubit.widget.routineortodo.CHECKED_ACTION" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget2_info" />
+        </receiver>
+
+<!--        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"-->
+        <activity
+            android:name=".conf.Widget2ConfigureActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".conf.Widget3aConfigureActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".conf.Widget3bConfigureActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <!-- 위젯 Service -->
+        <!-- aspectRatio는 resizeableActivity가 false여야 함. -->
+        <!-- aspectRatio가 수정되었다면 constrants의 cWidth도 수정해줘야 함. -->
+        <!--
+        2022.01.30 안드로이드 태블릿 임시대응 코드 제거
+        android:minAspectRatio="1.8"
+        android:resizeableActivity="false"
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:enabled="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+
+                
+            </intent-filter>
+            <!-- deep link -->
+            <intent-filter android:label="@string/intent_filter_1">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="widget"
+                    android:scheme="roubitapp"
+                    android:pathPrefix="/widget" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="ext"
+                    android:scheme="vnd.android.nfc" />
+                <!-- android:pathPrefix="/yourdomain.com:yourtypename" -->
+            </intent-filter>
+
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
+        </activity> <!-- kakao -->
+        <activity-alias
+    android:name=".MainActivityDefault"
+    android:enabled="true"
+    android:exported="true"
+    android:icon="@mipmap/logo_1"
+    android:targetActivity=".MainActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+</activity-alias>
+          <activity-alias
+        android:name="com.roubit.MainActivitylogo_1"
+        android:enabled="false"
+        android:exported="true"
+        android:icon="@mipmap/logo_1"
+        android:targetActivity=".MainActivity">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity-alias>
+
+      <activity-alias
+        android:name="com.roubit.MainActivitylogo_2"
+        android:enabled="false"
+        android:exported="true"
+        android:icon="@mipmap/logo_2"
+        android:targetActivity=".MainActivity">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity-alias>
+
+       <!-- kakao -->
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" /> <!-- kakao v3.0.3 -->
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth“ -->
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao6a0433cc67364c7ecb266421161e1a69" />
+            </intent-filter>
+        </activity> <!-- 220905: Facebook SDK -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token" />
+        <meta-data
+            android:name="com.dieam.reactnativepushnotification.notification_channel_name"
+            android:value="Roubit Notification Channel" />
+        <meta-data
+            android:name="com.dieam.reactnativepushnotification.notification_channel_description"
+            android:value="Roubit" /> <!-- Change the value to false if you don't want the creation of the default channel -->
+        <meta-data
+            android:name="com.dieam.reactnativepushnotification.channel_create_default"
+            android:value="false" /> <!-- Change the resource name to your App's accent color - or any other color you want -->
+        <meta-data
+            android:name="com.dieam.reactnativepushnotification.notification_color"
+            android:resource="@android:color/white" /> <!-- < Only if you're using GCM or localNotificationSchedule() > -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5693625768006184~6074190891"/>
+        <!-- <receiver -->
+        <!-- android:name="com.google.android.gms.gcm.GcmReceiver" -->
+        <!-- android:exported="true" -->
+        <!-- android:permission="com.google.android.c2dm.permission.SEND" > -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.android.c2dm.intent.RECEIVE" /> -->
+        <!-- <category android:name="${applicationId}" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
+        <!-- < Only if you're using GCM or localNotificationSchedule() > -->
+        <receiver android:exported="false" android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
+        <receiver
+            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService" />
+    </application>
+
+</manifest>
